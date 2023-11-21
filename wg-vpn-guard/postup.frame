@@ -1,0 +1,36 @@
+PROTOCOL="udp"
+
+# Disable IPv6
+## Via system
+sysctl -w net.ipv6.conf.all.disable_ipv6=1
+sysctl -w net.ipv6.conf.default.disable_ipv6=1
+sysctl -w net.ipv6.conf.lo.disable_ipv6=1
+
+## Via iptables
+ip6tables -N WG3_V6_DROP
+ip6tables -A WG3_V6_DROP -j DROP
+
+## Apply the rule
+ip6tables -A OUTPUT -j WG3_V6_DROP
+ip6tables -A INPUT -j WG3_V6_DROP
+
+# Only allow VPN connections
+## New rules
+iptables -N INPUT_WG3_V4
+iptables -N OUTPUT_WG3_V4
+
+## Allow all through the VPN interface
+iptables -A OUTPUT_WG3_V4 -o wg3 -j RETURN
+iptables -A INPUT_WG3_V4 -i wg3 -j RETURN
+
+## Allow outbound connections to the VPN
+iptables -A OUTPUT_WG3_V4 -d "$VPN_SERVER" -p "$PROTOCOL" --dport "$PORT" -j RETURN
+iptables -A INPUT_WG3_V4 -s "$VPN_SERVER" -p "$PROTOCOL" --sport "$PORT" -j RETURN
+
+## Otherwise drop
+iptables -A OUTPUT_WG3_V4 -j DROP 
+iptables -A INPUT_WG3_V4 -j DROP
+
+## Apply the rules
+iptables -A INPUT -j INPUT_WG3_V4
+iptables -A OUTPUT -j OUTPUT_WG3_V4
