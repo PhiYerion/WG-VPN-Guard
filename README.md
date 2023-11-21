@@ -9,7 +9,7 @@ Get your VPN file (e.g. wg0.conf)
 
 Put it in /etc/wireguard/
 
-`mv ./wg0.conf /etc/wireguard/`
+`sudo mv ./wg0.conf /etc/wireguard/`
 
 Get the code
 
