@@ -1,8 +1,41 @@
 # WG-VPN-Guard
 Many wireguard connections that are shipped to the client don't reroute or block ipv6 and it doesn't block traffic that is not routing through the VPN. This script goes through your /etc/wireguard/ directory, and forces each connection to disable ipv6 and block all traffic besides packets going to your VPN's ip address and port via UDP.
 
+## Dependencies
+- iptables and ip6tables
+- wg-quick
+- a wiregaurd configuration file
+
+## Usage
+Get your VPN file (e.g. wg0.conf)
+
+Put it in /etc/wireguard/
+
+`sudo mv ./wg0.conf /etc/wireguard/`
+
+Get the code
+
+`git clone https://github.com/PhiYerion/WG-VPN-Gaurd/`
+
+(Optional) Go into the repo
+
+`cd WG-VPN-Gaurd`
+
+Audit the code (this is going to be run as sudo)
+
+`less *`, `nano gen_gaurd.sh`, `nvim .`, `vim .`
+
+Run the script as root
+
+`sudo ./gen_gaurd.sh`
+
+Start the VPN
+
+`sudo wg-quick up wg0`
+
 ## (Unexpected) Effects
 This blocks all conventional internet traffic (this excludes ARP and DHCP at the very least), including your local network. You will not be able to ping your router or other devices on your network.
+
 Additionally, ipv6 is blocked. Some VPNs like Mullvad have ipv6 support, so if you want to use that you will have to modify the script or not use it.
 
 ## Testing
