@@ -23,6 +23,14 @@ iptables -N OUTPUT_WG3_V4
 iptables -A OUTPUT_WG3_V4 -o "$IFACE" -j RETURN
 iptables -A INPUT_WG3_V4 -i "$IFACE" -j RETURN
 
+## Allow local traffic, this includes virbr, lo, wg, etc
+LOCAL_IPS=$(ip a show | grep -Po 'inet \K[\d.]+/\d+')
+for LOCAL_IP in $LOCAL_IPS; do
+    iptables -A INPUT_WG3_V4 -d "$LOCAL_IP" -j RETURN
+    iptables -A OUTPUT_WG3_V4 -d "$LOCAL_IP" -j RETURN
+done
+iptables -A OUTPUT_WG3_V4 -s "$LOCAL_IP" -j RETURN
+
 ## Allow outbound connections to the VPN
 iptables -A OUTPUT_WG3_V4 -d "$VPN_SERVER" -p "$PROTOCOL" --dport "$PORT" -j RETURN
 iptables -A INPUT_WG3_V4 -s "$VPN_SERVER" -p "$PROTOCOL" --sport "$PORT" -j RETURN
