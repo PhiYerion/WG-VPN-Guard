@@ -6,21 +6,34 @@ iptables, ip6tables
 
 ## Usage
 Get your VPN file (e.g. wg0.conf)
+
 Put it in /etc/wireguard/
+
 `mv ./wg0.conf /etc/wireguard/`
+
 Get the code
+
 `git clone https://github.com/PhiYerion/WG-VPN-Gaurd/`
+
 (Optional) Go into the repo
+
 `cd WG-VPN-Gaurd`
+
 Audit the code (this is going to be run as sudo)
+
 `less *`, `nano gen_gaurd.sh`, `nvim .`, `vim .`
+
 Run the script as root
+
 `sudo ./gen_gaurd.sh`
+
 Start the VPN
+
 `sudo wg-quick up wg0`
 
 ## (Unexpected) Effects
 This blocks all conventional internet traffic (this excludes ARP and DHCP at the very least), including your local network. You will not be able to ping your router or other devices on your network.
+
 Additionally, ipv6 is blocked. Some VPNs like Mullvad have ipv6 support, so if you want to use that you will have to modify the script or not use it.
 
 ## Testing
