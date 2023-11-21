@@ -2,7 +2,9 @@
 Many wireguard connections that are shipped to the client don't reroute or block ipv6 and it doesn't block traffic that is not routing through the VPN. This script goes through your /etc/wireguard/ directory, and forces each connection to disable ipv6 and block all traffic besides packets going to your VPN's ip address and port via UDP.
 
 ## Dependencies
-iptables, ip6tables
+- iptables and ip6tables
+- wg-quick
+- a wiregaurd configuration file
 
 ## Usage
 Get your VPN file (e.g. wg0.conf)
