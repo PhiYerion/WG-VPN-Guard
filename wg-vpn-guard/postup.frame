@@ -20,8 +20,8 @@ iptables -N INPUT_WG3_V4
 iptables -N OUTPUT_WG3_V4
 
 ## Allow all through the VPN interface
-iptables -A OUTPUT_WG3_V4 -o wg3 -j RETURN
-iptables -A INPUT_WG3_V4 -i wg3 -j RETURN
+iptables -A OUTPUT_WG3_V4 -o "$IFACE" -j RETURN
+iptables -A INPUT_WG3_V4 -i "$IFACE" -j RETURN
 
 ## Allow outbound connections to the VPN
 iptables -A OUTPUT_WG3_V4 -d "$VPN_SERVER" -p "$PROTOCOL" --dport "$PORT" -j RETURN

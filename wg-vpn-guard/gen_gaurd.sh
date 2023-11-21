@@ -52,16 +52,19 @@ for file in /etc/wireguard/wg*.conf; do
 	fi
 
 	# Get the address and port from the config file
-	address=$(grep -oP '(?<=Endpoint = )[0-9.]*' "$file")
-	port=$(grep -oP '(?<=:)[0-9]*' "$file")
+	address="$(grep -oP '(?<=Endpoint = )[0-9.]*' "$file")"
+	port="$(grep -oP '(?<=:)[0-9]*' "$file")"
+	interface="$(echo "$file" | grep -oP '[^/]*(?=\.conf)')"
 
 	# Create the postup file
 	## Sha-bang to the shell
 	printf '#!/bin/sh\n' > "$postup_file" || exit 1
 	## Create the proper variables for the postup file
-	## to reference
-	printf 'VPN_SERVER=%s\nPORT=%s\n' \
-		   "$address" "$port" \
+	## to reference. There should be single quotes for the
+	## %s otherwise the variables could be used for shell
+	## execution (should be under root:root anways though).
+	printf "VPN_SERVER='%s'\nPORT='%s'\nIFACE='%s'\n" \
+		   "$address" "$port" "$interface" \
 		   >> "$postup_file" || exit 1
 	## Add the base postup file to the postup file
 	cat "$base_postup_file" >> "$postup_file" || exit 1
