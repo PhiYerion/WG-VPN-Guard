@@ -5,10 +5,7 @@
 sysctl -w net.ipv6.conf.all.disable_ipv6=0
 sysctl -w net.ipv6.conf.default.disable_ipv6=0
 sysctl -w net.ipv6.conf.lo.disable_ipv6=0
-
-## iptables
-ip6tables -A OUTPUT -j ACCEPT
-ip6tables -A INPUT -j ACCEPT
+## ip6tables will come later
 
 # provide fault tolerance
 while true; do
