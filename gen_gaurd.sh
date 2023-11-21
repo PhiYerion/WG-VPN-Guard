@@ -1,4 +1,13 @@
 #!/bin/sh
+
+# Make sure dependencies are installed
+for package in "iptables" "ip6tables" "wg-quick"; do 
+	if ! command -v "$package" >/dev/null 2>&1; then
+		echo "$package needs to be installed"
+		exit 1
+	fi
+done
+
 current_dir="$(cd "$(dirname "$0")" && pwd)"
 
 # This file is used to reset iptables and sysctl after the vpn
